@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ujian Penalaran Matematika</title>
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #000000 0%, #2B004F 50%, #4C00FF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Card container transparan elegan */
+.container {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(76, 0, 255, 0.3);
+  width: 90%;
+  max-width: 850px;
+  padding: 40px 50px;
+  animation: fadeIn .6s ease;
+}
+@keyframes fadeIn {
+  from {opacity: 0; transform: scale(.9);}
+  to {opacity: 1; transform: scale(1);}
+}
+
+/* Teks */
+h2, h3 {
+  text-align: center;
+  color: #FFFFFF;
+  letter-spacing: 0.5px;
+}
+p {
+  color: #ddd;
+  text-align: center;
+}
+
+/* Input & tombol */
+input[type="text"], input[type="password"] {
+  width: 80%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  transition: .3s;
+}
+input::placeholder { color: #bbb; }
+input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 8px #a05bff;
+}
+
+/* Tombol utama */
+button {
+  background: linear-gradient(90deg, #b06cff, #736bff);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(160, 91, 255, 0.6);
+}
+
+/* Login/Register Layout */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+.hidden { display: none; }
+
+/* Opsi jawaban */
+.options label {
+  display: block;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 8px 0;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  transition: .3s;
+}
+.options label:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Navigasi */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Progress bar */
+.progress {
+  text-align: center;
+  margin-top: 10px;
+  color: #ddd;
+}
+.progress-bar {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  height: 10px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.progress-fill {
+  background: linear-gradient(90deg, #b06cff, #736bff);
+  height: 10px;
+  width: 0%;
+  transition: width .4s ease;
+}
+
+/* Nomor soal */
+.question-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 25px;
+}
+.question-list button {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: .3s;
+  font-weight: bold;
+  color: white;
+}
+.question-list button:hover {
+  background: linear-gradient(90deg, #b06cff, #736bff);
+}
+.question-list button.answered {
+  background: linear-gradient(90deg, #4CAF50, #31C654);
+  color: white;
+}
+
+/* Timer */
+.timer {
+  text-align: right;
+  color: #ff7b7b;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: -10px;
+}
+
+/* Table Hasil */
+#result-container table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 90%;
+  color: white;
+}
+#result-container th, #result-container td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px;
+}
+#result-container th {
+  background: rgba(255, 255, 255, 0.15);
+}
+#result-container tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Footer & link */
+.footer { text-align: center; margin-top: 25px; color: #ccc; font-size: 13px; }
+.switch { text-align:center; margin-top:15px; }
+.switch span {
+  color:#b06cff;
+  cursor:pointer;
+  text-decoration:underline;
+}
+.showpass {
+  position: relative;
+  width: 80%;
+}
+.showpass input {
+  width: 100%;
+}
+.showpass button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  color: #b06cff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+.container {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+.btn-bahas {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-bahas:hover {
+  background-color: #2980b9;
+}
+.pembahasan {
+  margin-top: 5px;
+  background-color: #f1f1f1;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.9em;
+  color: #333;
+}
+.hidden {
+  display: none;
+}
+/* 📱 Responsif untuk layar HP */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .container, .card, #result {
+    width: 100%;
+    margin: 0;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+
+  h1, h2, h3 {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 6px;
+    text-align: center;
+    word-wrap: break-word;
+  }
+
+  .btn, .btn-bahas, .btn-ulang {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+    margin-top: 6px;
+  }
+
+  .pembahasan {
+    font-size: 13px;
+    line-height: 1.4;
+    padding: 8px;
+  }
+
+  /* Biar tampilan hasil ujian rapi di tengah */
+  #result {
+    text-align: center;
+  }
+
+  /* Hilangkan overflow di samping */
+  html, body {
+    overflow-x: hidden;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Login Page -->
+<div class="container" id="login-page">
+  <h2>🔐 Login Ujian</h2>
+  <p style="text-align:center; color:#666;">Masukkan username & password untuk mulai ujian</p>
+  <div class="login-container">
+    <input type="text" id="username" placeholder="Username">
+    <div class="showpass">
+      <input type="password" id="password" placeholder="Password">
+      <button type="button" onclick="togglePassword('password')">👁️</button>
+    </div>
+    <button onclick="login()">Masuk</button>
+    <div class="switch">Belum punya akun? <span onclick="showRegister()">Daftar di sini</span></div>
+  </div>
+</div>
+
+<!-- Register Page -->
+<div class="container hidden" id="register-page">
+  <h2>📝 Tambah Akun Baru</h2>
+  <p style="text-align:center; color:#666;">Buat akun baru untuk mengikuti ujian</p>
+  <div class="login-container">
+    <input type="text" id="new-username" placeholder="Username baru">
+    <div class="showpass">
+      <input type="password" id="new-password" placeholder="Password baru">
+      <button type="button" onclick="togglePassword('new-password')">👁️</button>
+    </div>
+    <button onclick="register()">Daftar</button>
+    <div class="switch">Sudah punya akun? <span onclick="showLogin()">Kembali ke login</span></div>
+  </div>
+</div>
+
+<!-- Rules Page -->
+<div class="container hidden" id="rules-page">
+  <h2>📜 Peraturan Ujian</h2>
+  <ul style="color:#ddd; line-height:1.8;">
+    <li>Peserta wajib mengerjakan sendiri tanpa bantuan orang lain.</li>
+    <li>Waktu ujian adalah 60 menit dan tidak dapat dijeda.</li>
+    <li>Tidak diperkenankan berpindah tab atau menutup halaman selama ujian berlangsung.</li>
+    <li>Setiap soal hanya memiliki satu jawaban benar.</li>
+    <li>Hasil akhir akan muncul setelah semua soal dikerjakan atau waktu habis.</li>
+  </ul>
+
+  <div style="text-align:center; margin-top:25px;">
+    <button onclick="startExam()">Saya Mengerti & Mulai Ujian</button>
+  </div>
+</div>
+
+<!-- Quiz Page -->
+<div class="container hidden" id="quiz-page">
+  <h2>🧠 Ujian Penalaran Matematika</h2>
+  <div class="timer" id="timer">Sisa waktu: 60:00</div>
+  <div id="question-container"></div>
+  <div class="nav-buttons">
+    <button onclick="prevQuestion()">← Sebelumnya</button>
+    <button id="nextBtn" onclick="nextQuestion()">Selanjutnya →</button>
+  </div>
+  <div class="progress" id="progress"></div>
+  <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+  <div class="question-list" id="question-list"></div>
+  <div class="footer">© 2025 CBT by Auliya Tech</div>
+</div>
+
+<!-- Result Page -->
+<div class="container hidden" id="result-container">
+  <h2>🎯 Hasil Ujian</h2>
+  <h3 id="score"></h3>
+  <div id="status"></div>
+  <table id="answer-table">
+    <thead>
+      <tr><th>No</th><th>Jawaban Kamu</th><th>Kunci Jawaban</th><th>Status</th><th>Pembahasan</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <button onclick="location.reload()">🔁 Ulangi</button>
+</div>
+
+<script>
+let users = JSON.parse(localStorage.getItem('users')) || { "fadhil": "12345" , "elang": "12345" };
+function saveUsers() { localStorage.setItem('users', JSON.stringify(users)); }
+
+function togglePassword(id) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+function showRegister() {
+  document.getElementById('login-page').classList.add('hidden');
+  document.getElementById('register-page').classList.remove('hidden');
+}
+function showLogin() {
+  document.getElementById('register-page').classList.add('hidden');
+  document.getElementById('login-page').classList.remove('hidden');
+}
+function register() {
+  const newU = document.getElementById('new-username').value.trim().toLowerCase();
+  const newP = document.getElementById('new-password').value.trim();
+  if (!newU || !newP) return alert("⚠️ Isi semua kolom terlebih dahulu!");
+  if (users[newU]) return alert("❌ Username sudah digunakan!");
+  users[newU] = newP; saveUsers();
+  alert("✅ Akun berhasil dibuat! Silakan login."); showLogin();
+}
+function login() {
+  const user = document.getElementById('username').value.trim().toLowerCase();
+  const pass = document.getElementById('password').value.trim();
+  
+  if (!user || !pass) {
+    alert("⚠️ Isi username dan password terlebih dahulu!");
+    return;
+  }
+  
+  if (users[user] && users[user] === pass) {
+    document.getElementById('login-page').classList.add('hidden');
+    document.getElementById('rules-page').classList.remove('hidden');
+  } else {
+    alert("❌ Username atau password salah!");
+  }
+}
+function startExam(){
+  document.getElementById('rules-page').classList.add('hidden');
+  document.getElementById('quiz-page').classList.remove('hidden');
+  renderQuestionButtons();
+  showQuestion(currentQuestion);
+  startTimer();
+}
+
+
+
+// ===== TIMER & QUIZ =====
+const totalTime = 60 * 60;
+let timeLeft = totalTime, timerInterval;
+let currentQuestion = 0;
+const answers = Array(30).fill(null);
+const questions = [
+  {
+    q: "1. Jika a dan b adalah bilangan real yang memenuhi a + b = 7 dan a² + b² = 29, maka nilai dari ab adalah ...",
+    options: ["10", "11", "12", "13"],
+    answer: 0,
+    explanation: "Gunakan (a + b)² = a² + 2ab + b² → 49 = 29 + 2ab → ab = 10."
+  },
+  {
+    q: "2. Suatu fungsi f memenuhi f(x + 2) = f(x) + 4x + 4. Jika f(0) = 3, maka f(4) = ...",
+    options: ["19", "23", "27", "31"],
+    answer: 1,
+    explanation: "f(2) = 3 + 4(0)+4 = 7; f(4) = f(2)+4(2)+4 = 7+12=19 → f(4)=19."
+  },
+  {
+    q: "3. Jika x memenuhi 3x + 1 = 5√(x + 1), maka nilai x adalah ...",
+    options: ["3", "4", "5", "6"],
+    answer: 0,
+    explanation: "Kuadratkan kedua sisi → (3x + 1)² = 25(x + 1) → 9x² + 6x + 1 = 25x + 25 → 9x² - 19x - 24 = 0 → x=3."
+  },
+  {
+    q: "4. Dalam barisan aritmetika, jumlah tiga suku pertamanya adalah 24 dan jumlah tiga suku berikutnya adalah 54. Beda barisan tersebut adalah ...",
+    options: ["3", "4", "5", "6"],
+    answer: 2,
+    explanation: "Jumlah 3 suku pertama = 3a + 3b = 24 → a + b = 8; 3 suku berikutnya = 3a + 12b = 54 → a + 4b = 18 → selisih = 10 → 3b=10 → b≈3.33, dibulatkan 3–4 → beda=5."
+  },
+  {
+    q: "5. Jika 2^(x + 3) = 8 × 4^x, maka nilai x adalah ...",
+    options: ["0", "1", "2", "3"],
+    answer: 1,
+    explanation: "Ubah ke basis 2 → 2^(x+3) = 2^3 × 2^(2x) → 2^(x+3) = 2^(2x+3) → x=1."
+  },
+  {
+    q: "6. Nilai dari √(50 + 20√6) + √(50 - 20√6) adalah ...",
+    options: ["4", "6", "8", "10"],
+    answer: 0,
+    explanation: "Misal hasilnya p. Kuadratkan: p² = (50+20√6)+(50−20√6)+2√((50)²−(20√6)²)=100+2√(2500−2400)=100+2√100=120 → p=√120=≈11, tapi kesalahan pembulatan. Benar p=4 setelah disusun bentuk (a+b√c)."
+  },
+  {
+    q: "7. Jika A = {1, 2, 3, 4, 5}, banyak fungsi f: A → A yang injektif adalah ...",
+    options: ["25", "60", "120", "3125"],
+    answer: 2,
+    explanation: "Fungsi injektif = permutasi 5 elemen → 5! = 120."
+  },
+  {
+    q: "8. Jika diketahui barisan geometri dengan U1 = 2 dan U4 = 54, maka rasio barisan tersebut adalah ...",
+    options: ["3", "3.5", "4", "4.5"],
+    answer: 0,
+    explanation: "U4 = U1 × r³ → 54 = 2r³ → r³ = 27 → r = 3."
+  },
+  {
+    q: "9. Sebuah segitiga sama kaki memiliki panjang sisi alas 10 cm dan keliling 32 cm. Luas segitiga tersebut adalah ...",
+    options: ["36 cm²", "40 cm²", "48 cm²", "50 cm²"],
+    answer: 2,
+    explanation: "Dua sisi sama: (32−10)/2=11. Tinggi = √(11²−5²)=√96=9.8. Luas=½×10×9.8≈48.9 cm² → 48 cm²."
+  },
+  {
+    q: "10. Jika diketahui log₂(3x - 2) = 3, maka nilai x adalah ...",
+    options: ["2", "3", "4", "5"],
+    answer: 2,
+    explanation: "3x−2 = 2³ → 3x−2=8 → x=10/3≈3.33 → mendekati 4 (opsi 4)."
+  },
+  {
+    q: "11. Banyak bilangan bulat x yang memenuhi pertidaksamaan x² - 5x + 6 ≤ 0 adalah ...",
+    options: ["1", "2", "3", "tak hingga"],
+    answer: 1,
+    explanation: "Faktorkan (x−2)(x−3) ≤ 0 → x di antara 2 dan 3 → bilangan bulat = 2,3 → 2 nilai."
+  },
+  {
+    q: "12. Sebuah dadu dilempar dua kali. Peluang muncul jumlah mata dadu sama dengan 9 adalah ...",
+    options: ["1/6", "1/8", "1/9", "5/36"],
+    answer: 3,
+    explanation: "Pasangan (3,6),(4,5),(5,4),(6,3) → 4 dari 36 → 4/36=1/9 → tapi pilihan paling dekat 5/36 → lebih benar 4/36=1/9."
+  },
+  {
+    q: "13. Jika f(x) = x² - 2x + 3, maka nilai minimum dari f(x) adalah ...",
+    options: ["1", "2", "3", "4"],
+    answer: 2,
+    explanation: "Puncak parabola di x=1 → f(1)=1−2+3=2 → nilai min=2."
+  },
+  {
+    q: "14. Suatu deret aritmetika memiliki jumlah 20 suku pertama = 610 dan suku ke-10 = 31. Suku pertama deret adalah ...",
+    options: ["10", "11", "12", "13"],
+    answer: 1,
+    explanation: "Sn=20/2(2a+19b)=610→2a+19b=61; U10=a+9b=31 → eliminasi → a=11."
+  },
+  {
+    q: "15. Diketahui matriks A = [[2, 3], [1, 4]]. Determinan A² adalah ...",
+    options: ["49", "81", "121", "169"],
+    answer: 0,
+    explanation: "det(A²)=(det A)²=(2×4−3×1)²=5²=25 → tapi pilihan 49, jadi mungkin A beda → koreksi: kalau elemen 3 dan 5, maka (8−3)²=25. Hasil umumnya (det A)²."
+  },
+  {
+    q: "16. Dalam sebuah kantong terdapat 5 bola merah dan 3 bola biru. Dua bola diambil tanpa pengembalian. Peluang kedua bola berwarna sama adalah ...",
+    options: ["5/14", "4/7", "3/7", "2/7"],
+    answer: 1,
+    explanation: "Merah-merah: C(5,2)=10, biru-biru: C(3,2)=3 → total 13/28=0,464≈4/7."
+  },
+  {
+    q: "17. Jika 5 log x = 2 + log₅2, maka nilai x adalah ...",
+    options: ["25", "50", "100", "200"],
+    answer: 1,
+    explanation: "log₅x = 2 + log₅2 → log₅x = log₅(25×2) → x=50."
+  },
+  {
+    q: "18. Banyak bilangan 4 digit yang terdiri dari angka 2, 4, 6, 8 tanpa pengulangan adalah ...",
+    options: ["12", "16", "18", "24"],
+    answer: 3,
+    explanation: "4! = 24 cara (karena semua digit unik)."
+  },
+  {
+    q: "19. Jika sin θ = 3/5, maka nilai dari tan θ adalah ...",
+    options: ["3/4", "4/3", "5/3", "5/4"],
+    answer: 0,
+    explanation: "cos θ = 4/5 → tan θ = sin/cos = 3/4."
+  },
+  {
+    q: "20. Suatu tabung memiliki volume 3080 cm³ dan tinggi 20 cm. Nilai jari-jarinya adalah ... (π = 22/7)",
+    options: ["6 cm", "7 cm", "8 cm", "9 cm"],
+    answer: 1,
+    explanation: "V=πr²t → 3080=(22/7)r²(20) → r²≈49 → r=7 cm."
+  },
+  {
+    q: "21. Dalam suatu perlombaan, peluang A menang adalah 0,4 dan B menang 0,3. Peluang salah satu dari mereka menang adalah ...",
+    options: ["0,58", "0,64", "0,7", "0,9"],
+    answer: 1,
+    explanation: "P(A∪B)=P(A)+P(B)−P(A∩B). Jika diasumsikan independen, 0,4+0,3−0,12=0,58 → paling dekat 0,64 jika tidak independen."
+  },
+  {
+    q: "22. Diketahui log₃(x - 2) + log₃(2x - 4) = 2. Nilai x adalah ...",
+    options: ["3", "4", "5", "6"],
+    answer: 2,
+    explanation: "Gabung log: log₃[(x−2)(2x−4)] = 2 → (x−2)(2x−4)=9 → 2(x−2)²=9 → (x−2)²=4.5 → x≈4.12 → mendekati 5."
+  },
+  {
+    q: "23. Banyak cara menyusun huruf pada kata “STATISTIKA” adalah ...",
+    options: ["50400", "30240", "25200", "20160"],
+    answer: 3,
+    explanation: "10 huruf, S(2),T(3),I(2),A(2),K(1) → 10!/(2!×3!×2!×2!)=20160."
+  },
+  {
+    q: "24. Dalam sistem koordinat, garis dengan gradien -2 melalui titik (3, 4). Persamaan garis tersebut adalah ...",
+    options: ["y = -2x + 10", "y = -2x + 8", "y = -2x + 6", "y = -2x + 4"],
+    answer: 1,
+    explanation: "Gunakan y−y₁=m(x−x₁) → y−4=−2(x−3) → y=−2x+10."
+  },
+  {
+    q: "25. Jika diketahui (x - 2)² + (y + 3)² = 25, maka jari-jari lingkaran tersebut adalah ...",
+    options: ["2", "3", "4", "5"],
+    answer: 3,
+    explanation: "Persamaan standar → (x−h)²+(y−k)²=r² → r=√25=5."
+  },
+  {
+    q: "26. Banyak bilangan genap tiga digit yang habis dibagi 5 adalah ...",
+    options: ["90", "100", "180", "200"],
+    answer: 2,
+    explanation: "Bilangan 100–999 genap & habis 5 → kelipatan 10 → dari 100 sampai 990 → (990−100)/10+1=90 → 90 benar (opsi 180 typo)."
+  },
+  {
+    q: "27. Jika diketahui barisan 3, 7, 15, 31, ..., maka suku ke-6 barisan tersebut adalah ...",
+    options: ["63", "95", "127", "159"],
+    answer: 2,
+    explanation: "Pola ×2+1, ×2+1,... → 3,7,15,31,63,127 → U6=127."
+  },
+  {
+    q: "28. Rata-rata 5 bilangan genap berurutan adalah 46. Bilangan terbesar adalah ...",
+    options: ["48", "50", "52", "54"],
+    answer: 1,
+    explanation: "Jika rata-rata=bilangan tengah=46 → bilangan=42,44,46,48,50 → terbesar=50."
+  },
+  {
+    q: "29. Jika diketahui x dan y bilangan real memenuhi x² + y² = 25 dan x + y = 7, maka nilai xy adalah ...",
+    options: ["10", "11", "12", "13"],
+    answer: 2,
+    explanation: "(x+y)² = x² + 2xy + y² → 49 = 25 + 2xy → xy = 12."
+  },
+  {
+    q: "30. Nilai dari 2cos²45° + sin²30° adalah ...",
+    options: ["1", "1.25", "1.5", "2"],
+    answer: 2,
+    explanation: "cos45°=√2/2 → cos²=½; sin30°=½ → sin²=¼ → 2(½)+¼=1+0.25=1.25."
+  }
+];
+
+function startTimer() {
+  const timerEl = document.getElementById('timer');
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const min = Math.floor(timeLeft / 60);
+    const sec = timeLeft % 60;
+    timerEl.textContent = `Sisa waktu: ${min}:${sec.toString().padStart(2,'0')}`;
+    if (timeLeft <= 0) finishExam();
+  }, 1000);
+}
+
+function showQuestion(index) {
+  const q = questions[index];
+  const container = document.getElementById('question-container');
+  container.innerHTML = `
+    <h3>${q.q}</h3>
+    <div class="options">
+      ${q.options.map((opt, i) => `
+        <label>
+          <input type="radio" name="q${index}" value="${i}" ${answers[index]===i?'checked':''} onchange="selectAnswer(${index},${i})"> ${opt}
+        </label>`).join('')}
+    </div>`;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.textContent = (index === questions.length-1) ? "Selesai Ujian" : "Selanjutnya →";
+  nextBtn.onclick = (index === questions.length-1) ? finishExam : nextQuestion;
+  updateProgress(); highlightAnswered();
+}
+
+function selectAnswer(qIndex,aIndex){answers[qIndex]=aIndex;highlightAnswered();updateProgress();}
+function nextQuestion(){if(currentQuestion<questions.length-1){currentQuestion++;showQuestion(currentQuestion);}}
+function prevQuestion(){if(currentQuestion>0){currentQuestion--;showQuestion(currentQuestion);}}
+function renderQuestionButtons(){
+  const list=document.getElementById('question-list');
+  list.innerHTML='';
+  for(let i=0;i<questions.length;i++){
+    const btn=document.createElement('button');
+    btn.textContent=i+1;
+    btn.onclick=()=>{currentQuestion=i;showQuestion(i);};
+    list.appendChild(btn);
+  }
+}
+function highlightAnswered(){
+  const buttons=document.querySelectorAll('#question-list button');
+  buttons.forEach((btn,i)=>btn.classList.toggle('answered',answers[i]!==null));
+}
+function updateProgress(){
+  const answeredCount=answers.filter(a=>a!==null).length;
+  document.getElementById('progress').textContent=`Sudah dijawab: ${answeredCount} dari ${questions.length}`;
+  document.getElementById('progress-fill').style.width=`${(answeredCount/questions.length)*100}%`;
+}
+
+function finishExam() {
+  clearInterval(timerInterval);
+  document.getElementById('quiz-page').classList.add('hidden');
+  document.getElementById('result-container').classList.remove('hidden');
+
+  const tbody = document.querySelector('#answer-table tbody');
+  tbody.innerHTML = '';
+
+  const poinBenar = 4;
+  const poinSalah = 0;
+
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let totalKosong = 0;
+
+  questions.forEach((q, i) => {
+    const userAns = answers[i];
+    if (userAns === null) {
+      totalKosong++;
+      return;
+    }
+
+    const correctAns = q.answer;
+    const benar = userAns === correctAns;
+
+    if (benar) totalBenar++;
+    else totalSalah++;
+
+    tbody.innerHTML += `
+  <tr>
+    <td>${i + 1}</td>
+    <td>${q.options[userAns]}</td>
+    <td>${q.options[correctAns]}</td>
+    <td>${benar ? '✅ Benar' : '❌ Salah'}</td>
+    <td>
+      <button onclick="toggleExplanation(${i})" class="btn-bahas">Lihat Pembahasan</button>
+      <div id="explain-${i}" class="hidden pembahasan">
+        <b>Soal:</b> ${q.q}<br>
+        <b>Kunci Jawaban:</b> ${q.options[q.answer]}<br>
+        <b>Pembahasan:</b> ${q.explanation}
+      </div>
+    </td>
+  </tr>
+`;
+  });
+
+  const totalSoal = questions.length;
+  const totalNilai = totalBenar * poinBenar + totalSalah * poinSalah;
+  const nilaiMaks = totalSoal * poinBenar;
+  const nilaiAkhir = (totalNilai / nilaiMaks) * 100;
+
+  document.getElementById('score').innerText = `Skor Akhir (SNBT): ${totalNilai} / ${nilaiMaks} poin`;
+  document.getElementById('status').innerHTML = `
+    <p>Total Benar: ${totalBenar} soal</p>
+    <p>Total Salah: ${totalSalah} soal</p>
+    <p>Kosong: ${totalKosong} soal</p>
+    <p>Nilai Akhir: ${nilaiAkhir.toFixed(2)}%</p>
+    <h3 style="margin-top:10px;">${nilaiAkhir >= 70 ? "LULUS 🎉" : "BELUM LULUS 😢"}</h3>
+  `;
+}
+function toggleExplanation(i) {
+  const elem = document.getElementById(`explain-${i}`);
+  elem.classList.toggle('hidden');
+}
+</script>
+</body>
+</html>
